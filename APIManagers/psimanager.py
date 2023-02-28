@@ -1,4 +1,4 @@
-# import requests library to make requests and work with API
+# import requests library to make requests and work with APIs
 import requests
 # import from sgdatetime to get the SGT parameters
 import sgdatetime
