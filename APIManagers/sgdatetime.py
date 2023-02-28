@@ -1,4 +1,4 @@
-# for the API Managers to get SGT datetime 
+# for the API Managers to get SGT datetime
 
 # import pytz to get SGT
 import pytz
