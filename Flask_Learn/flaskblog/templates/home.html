@@ -1,6 +1,49 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for post in posts %}
+
+  <div class="row activity-chooser">
+    <div class="col-md-6">
+      <label for="activities">Activity:</label>
+        <select class="activity-dropdown" name="activities" id="activities">
+        <option value="basketball">Basketball</option>
+        <option value="badminton">Badminton</option>
+        <option value="tennis">Tennis</option>
+        <option value="runningTrack">Running Track</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="location">Location:</label>
+        <select class="activity-dropdown" name="location" id="location">
+        <option value="North">North</option>
+        <option value="South">South</option>
+        <option value="East">East</option>
+        <option value="West">West</option>
+      </select>
+      <button class="get-location-button" onclick="getLocation()">Get my location</button>
+
+      <script>
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+
+      function showPosition(position) {
+        alert("Latitude: " + position.coords.latitude + 
+        ", Longitude: " + position.coords.longitude); // add function to store location data next time
+      }
+      </script>
+    </div>
+  </div>
+
+  <div class="col-md-12 text-center">
+    <button type="button" class="btn btn-dark btn-lg search-btn">Search</button>
+  </div>
+  
+
+    <!-- {% for post in posts %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -11,5 +54,5 @@
             <p class="article-content">{{ post.content }}</p>
           </div>
         </article>
-    {% endfor %}
+    {% endfor %} -->
 {% endblock content %}

@@ -36,6 +36,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+.login-box {
+  padding: 5% 20%;
+}
+
 a.article-title:hover {
   color: #428bca;
   text-decoration: none;
@@ -77,4 +81,13 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+.activity-chooser {
+  padding: 15%;
+  font-size: 25px;
+}
+
+.get-location-button {
+  font-size: 15px;
 }

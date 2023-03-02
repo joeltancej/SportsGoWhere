@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="'content-section">
+    <div class="'content-section login-box">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
@@ -44,7 +44,7 @@
             </div>
         </form>
     </div>
-    <div class="border-top pt-3">
+    <div class="border-top pt-3 login-box">
         <small class="text-muted">
             Don't Have An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
         </small>
