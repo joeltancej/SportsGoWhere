@@ -4,7 +4,7 @@
   <div class="row activity-chooser">
     <div class="col-md-6">
       <label for="activities">Activity:</label>
-        <select class="activity-dropdown" name="activities" id="activities">
+        <select class="selectpicker" data-live-search="true" name="activities" id="activities">
         <option value="basketball">Basketball</option>
         <option value="badminton">Badminton</option>
         <option value="tennis">Tennis</option>
@@ -13,12 +13,13 @@
     </div>
     <div class="col-md-6">
       <label for="location">Location:</label>
-        <select class="activity-dropdown" name="location" id="location">
+        <select class="selectpicker" data-live-search="true" name="location" id="location">
         <option value="North">North</option>
         <option value="South">South</option>
         <option value="East">East</option>
         <option value="West">West</option>
       </select>
+    
       <button class="get-location-button" onclick="getLocation()">Get my location</button>
 
       <script>
@@ -32,7 +33,8 @@
 
       function showPosition(position) {
         alert("Latitude: " + position.coords.latitude + 
-        ", Longitude: " + position.coords.longitude); // add function to store location data next time
+        ", Longitude: " + position.coords.longitude);
+        var location = position.coords.latitude + position.coords.longitude; // add function to store location data next time
       }
       </script>
     </div>

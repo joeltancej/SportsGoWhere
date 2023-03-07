@@ -5,6 +5,7 @@ from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt, mail
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
 from flaskblog.models import Accounts
+from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from database import load_accounts_from_db
@@ -13,8 +14,9 @@ from database import load_accounts_from_db
 @app.route("/")
 @app.route("/home")
 def home():
+    activity = request.args.get("activities")
+    location = request.args.get("location")
     return render_template('home.html')
-
 
 @app.route("/about")
 def about():
