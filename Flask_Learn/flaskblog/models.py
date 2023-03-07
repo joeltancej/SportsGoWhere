@@ -1,20 +1,20 @@
 from datetime import datetime
-from itsdangerous import URLSafeTimedSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flaskblog import db, login_manager, app
 from flask_login import UserMixin
+from database import load_accounts_from_db
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return Accounts.query.get(int(user_id))
 
 
-class User(db.Model, UserMixin):
+class Accounts(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    email = db.Column(db.String(320), unique=True, nullable=False)
+    password = db.Column(db.String(127), nullable=False)
+    username = db.Column(db.String(20), nullable=False)
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -27,19 +27,18 @@ class User(db.Model, UserMixin):
             user_id = s.loads(token)['user_id']
         except:
             return None
-        return User.query.get(user_id)
+        return Accounts.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"Accounts('{self.email}', '{self.username}')"
 
 
-class Post(db.Model):
+# our model
+class UserInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
-    content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    username = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
 
-    def __repr__(self):
-        return f"Post('{self.title}', '{self.date_posted}')"
-
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
