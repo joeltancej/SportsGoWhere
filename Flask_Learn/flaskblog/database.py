@@ -9,22 +9,3 @@ engine = create_engine(
             "ssl_ca": "/etc/ssl/cert.pem"
         }
     })
-
-
-#def load_accounts_from_db():
-   # with engine.connect() as conn:
-        #result = conn.execute(text("select * from Accounts"))
-        #accounts = []
-        #for row in result.all():
-            #accounts.append(dict(row))
-        #return accounts
-
-
-def load_accounts_from_db():
-    return
-    with engine.connect() as conn:
-        result = conn.execute(text("select * from Accounts"))
-        print(result)
-        return result
-
-
