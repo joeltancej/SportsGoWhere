@@ -8,7 +8,6 @@ from flaskblog.models import Accounts
 from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
-from database import load_accounts_from_db
 
 
 @app.route("/")

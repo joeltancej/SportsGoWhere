@@ -2,7 +2,6 @@ from datetime import datetime
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flaskblog import db, login_manager, app
 from flask_login import UserMixin
-from database import load_accounts_from_db
 
 
 @login_manager.user_loader
