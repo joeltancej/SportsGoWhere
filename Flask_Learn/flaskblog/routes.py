@@ -7,7 +7,7 @@ from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, Requ
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
-from database import load_accounts_from_db
+from flaskblog.database import load_accounts_from_db
 
 posts = [
     {
