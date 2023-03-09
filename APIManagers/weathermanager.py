@@ -3,8 +3,6 @@ import requests
 # import from sgdatetime to get the SGT parameters
 import sgdatetime
 
-# for comments
-
 def gettemp():
     # making a GET request to the API endpoint, obtain output in a dictionary format with .json()
     response = requests.get("https://api.data.gov.sg/v1/environment/air-temperature", sgdatetime.get_dt()).json()
@@ -20,8 +18,6 @@ def getrain():
 
     # print(type(response.items))
     return rainfall
-
-
 
 # for testing reasons:
 # def main():

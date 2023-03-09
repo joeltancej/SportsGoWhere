@@ -14,9 +14,6 @@ def getpsi(region):
     # print(type(response.items))
     return psi
 
-
-
-
 # for testing reasons:
 # def main():
 ##     region = input("Region: ")
