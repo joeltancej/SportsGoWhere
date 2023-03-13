@@ -5,19 +5,17 @@
     <div class="col-md-6">
       <label for="activities">Activity:</label>
         <select class="selectpicker" data-live-search="true" name="activities" id="activities">
-        <option value="basketball">Basketball</option>
-        <option value="badminton">Badminton</option>
-        <option value="tennis">Tennis</option>
-        <option value="runningTrack">Running Track</option>
+        {% for sport in sports %}
+            <option>{{ sport }}</option>
+        {% endfor %}
       </select>
     </div>
     <div class="col-md-6">
       <label for="location">Location:</label>
         <select class="selectpicker" data-live-search="true" name="location" id="location">
-        <option value="North">North</option>
-        <option value="South">South</option>
-        <option value="East">East</option>
-        <option value="West">West</option>
+        {% for location in locations %}
+            <option>{{ location }}</option>
+        {% endfor %}
       </select>
     
       <button class="get-location-button" onclick="getLocation()">Get my location</button>

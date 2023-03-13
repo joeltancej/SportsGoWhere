@@ -9,13 +9,28 @@ from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
+SPORTS = [
+    'Basketball',
+    'Football', 
+    'Tennis', 
+    'Badminton'
+]
+
+LOCATIONS = [
+    'NORTH',
+    'SOUTH',
+    'EAST', 
+    'WEST'
+]
+
+SEARCH = {}
 
 @app.route("/")
 @app.route("/home")
 def home():
     activity = request.args.get("activities")
     location = request.args.get("location")
-    return render_template('home.html')
+    return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
 
 @app.route("/about")
 def about():
