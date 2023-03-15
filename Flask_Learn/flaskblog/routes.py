@@ -29,11 +29,14 @@ ACTIVITY = ""
 LOCATION = ""
 
 @app.route("/")
-@app.route("/home")
+@app.route("/home", methods = ['POST', 'GET'])
 def home():
-    ACTIVITY = request.args.get("activities")
-    LOCATION = request.args.get("location")
-    return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
+    if request.method == 'POST':
+        ACTIVITY = request.args.get("activities")
+        LOCATION = request.args.get("location")
+        return redirect(url_for('search', sports = SPORTS, locations = LOCATIONS))
+    else: 
+        return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
 
 @app.route("/about")
 def about():
@@ -41,6 +44,7 @@ def about():
 
 @app.route("/search")
 def search():
+    
     return render_template('search.html', title='Search results', activity=ACTIVITY, location=LOCATION)
 
 
