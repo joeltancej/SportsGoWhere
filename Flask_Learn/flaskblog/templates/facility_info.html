@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <h1 class="text-center">Facility Information</h1>
+
+  <div class="container middle">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12 text-right mt-2">
+            <a href="{{ url_for('home') }}" class="btn button-17">Reviews</a>
+          </div>
+          <div class="col-md-12 text-right mt-4">
+            <label for="id-of-input" class="custom-checkbox">
+              <input type="checkbox" id="id-of-input"/>
+              <span>Favorite</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Sports:</h5>
+            <p class="card-text">Information about sports available.</p>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Operating Hours:</h5>
+            <p class="card-text">Information about operating hours.</p>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Weather:</h5>
+            <p class="card-text">Information about weather conditions.</p>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Air Quality:</h5>
+            <p class="card-text">Information about air quality.</p>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <a href="{{ url_for('home') }}" class="btn button-17 mr-auto">Parking</a>
+          <a href="{{ url_for('home') }}" class="btn button-17 mx-auto">Directions</a>
+          <a href="{{ url_for('home') }}" class="btn button-17 ml-auto">Food</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
