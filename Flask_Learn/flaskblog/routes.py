@@ -25,16 +25,23 @@ LOCATIONS = [
 
 SEARCH = {}
 
+ACTIVITY = ""
+LOCATION = ""
+
 @app.route("/")
 @app.route("/home")
 def home():
-    activity = request.args.get("activities")
-    location = request.args.get("location")
+    ACTIVITY = request.args.get("activities")
+    LOCATION = request.args.get("location")
     return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+@app.route("/search")
+def search():
+    return render_template('search.html', title='Search results', activity=ACTIVITY, location=LOCATION)
 
 
 @app.route("/register", methods=['GET', 'POST'])
