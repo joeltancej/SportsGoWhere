@@ -16,17 +16,19 @@ SPORTS = [
     'Badminton'
 ]
 
-LOCATIONS = [
-    'NORTH',
-    'SOUTH',
-    'EAST', 
-    'WEST'
-]
+LOCATIONS = {
+    'NORTH': [1.4303502008219373, 103.79983165130324],
+    'SOUTH': [1.2992761595279543, 103.82034860814527],
+    'EAST': [1.3521733297485963, 103.93717682823622], 
+    'WEST': [1.351326983979124, 103.71833556089194]
+}
 
 SEARCH = {}
 
 ACTIVITY = ""
 LOCATION = ""
+LOCATION_LAT = ""
+LOCATION_LONG = ""
 
 @app.route("/")
 @app.route("/home", methods = ['POST', 'GET'])
@@ -42,10 +44,14 @@ def home():
 def about():
     return render_template('about.html', title='About')
 
-@app.route("/search")
+@app.route("/search", methods = ['POST', 'GET'])
 def search():
-    
-    return render_template('search.html', title='Search results', activity=ACTIVITY, location=LOCATION)
+    activity = request.args.get("activities")
+    location = request.args.get("location")
+    locationLat = LOCATIONS[location][0]
+    locationLong = LOCATIONS[location][1]
+
+    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -157,3 +163,9 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+
+# temporary way of accessing Facility Info page
+@app.route("/facility_info")
+def facility_info():
+    return render_template('facility_info.html')
