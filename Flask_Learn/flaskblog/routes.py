@@ -163,3 +163,9 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+
+# temporary way of accessing Facility Info page
+@app.route("/facility_info")
+def facility_info():
+    return render_template('facility_info.html')
