@@ -9,6 +9,7 @@ from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '75e7dae5b5f9ee81336b1a190b46c71c'
+# Change <password> and <database> to your respective local database's one (without the <>)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:<password>@localhost/<database_name>"
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
