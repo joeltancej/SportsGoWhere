@@ -9,7 +9,7 @@ from sqlalchemy import create_engine, text
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '75e7dae5b5f9ee81336b1a190b46c71c'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://2naahj3wjte7sag4lgll:pscale_pw_aHoiZ6aD6S7rZCyYDAlUAXxjie1DrD5oxLxXDTaBCqh@ap-southeast.connect.psdb.cloud/sportsgowhere_db?ssl=None'
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:<password>@localhost/<database_name>"
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -24,3 +24,6 @@ mail = Mail(app)
 
 
 from flaskblog import routes
+
+# For cloud database
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://2naahj3wjte7sag4lgll:pscale_pw_aHoiZ6aD6S7rZCyYDAlUAXxjie1DrD5oxLxXDTaBCqh@ap-southeast.connect.psdb.cloud/sportsgowhere_db?ssl=None'
