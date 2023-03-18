@@ -5,5 +5,33 @@
         {{ location }}
         {{ locationLat }}
         {{ locationLong }}
+        <br>
+
+        {% for res in result %}
+            {{ res[2] }}<br>
+        {% endfor %}
     </p>
+
+    <div id="content" class="container">
+        <div class="panel panel-default">
+        <div class="panel-body">
+            <h6 class="nomargin"> 
+                10 results
+            </h6>
+            <hr class="nomargin-bottom margin-top-10">
+            <!-- SEARCH RESULTS -->
+            {% for res in result %}
+            <div class="clearfix search-result"><!-- item -->
+                <h4><a href="#">{{ res[2] }}</a></h4>
+                <small class="text-success">Distance: {{ res[6] }}km</small>
+                <p>Facilities: {{ res[3] }}</p>
+            </div><!-- /item -->
+            {% endfor %}
+            <!-- /SEARCH RESULTS -->
+        
+        
+        </div>
+        </div>
+        
+        </div>
 {% endblock content %}

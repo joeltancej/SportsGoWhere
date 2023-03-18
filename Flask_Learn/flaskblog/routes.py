@@ -8,6 +8,7 @@ from flaskblog.models import Accounts
 from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
+import mysql.connector
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -56,6 +57,14 @@ LOCATIONS = {
     'WEST': [1.351326983979124, 103.71833556089194]
 }
 
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="password",
+    database="sportsgowhere"
+)
+
+
 
 SEARCH = {}
 
@@ -86,7 +95,21 @@ def search():
     locationLat = LOCATIONS[location][0]
     locationLong = LOCATIONS[location][1]
 
-    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong)
+    mycursor = mydb.cursor()
+    sql = """select Y, X, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
+	POW(69.1 * (Y - %s), 2) +
+    POW(69.1 * (%s - X) * COS(Y / 57.3), 2)) * 1.60934, 2) as distance
+    from sportsfacilities
+    where FACILITIES like "%""" + activity +"""%"
+    order by distance
+    limit 10;"""
+    
+    value = (locationLat, locationLong)
+    mycursor.execute(sql, value)
+    result = mycursor.fetchall()
+
+
+    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong, result=result)
 
 
 @app.route("/register", methods=['GET', 'POST'])
