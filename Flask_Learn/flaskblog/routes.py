@@ -223,13 +223,12 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-# temporary way of accessing Facility Info page
-@app.route("/facility_info")
+@app.route("/facility_info", methods=['GET', 'POST'])
 def facility_info():
-    return render_template('facility_info.html')
+    selected_facility = request.args.get('type')
+    return render_template('facility_info.html', selected_facility=selected_facility, )
 
 
-# temporary way of accessing Facility Info page
 @app.route("/search_results")
 def search_results():
     return render_template('search_results.html')

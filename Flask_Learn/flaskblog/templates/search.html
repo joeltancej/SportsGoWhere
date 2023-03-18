@@ -24,7 +24,7 @@
             <!-- SEARCH RESULTS -->
             {% for res in result %}
             <div class="clearfix search-result"><!-- item -->
-                <h4><a href="#">{{ res[2] }}</a></h4>
+                <h4><a href="{{url_for('facility_info', type=res[2])}}">{{ res[2] }}</a></h4>
                 <small class="text-success">Distance: {{ res[6] }}km</small>
                 <p>Facilities: {{ res[3] }}</p>
             </div><!-- /item -->
