@@ -102,14 +102,18 @@ def search():
     from sportsfacilities
     where FACILITIES like "%""" + activity +"""%"
     order by distance
-    limit 10;"""
+    limit 20;"""
     
     value = (locationLat, locationLong)
     mycursor.execute(sql, value)
     result = mycursor.fetchall()
 
+    resCount = 0
+    for i in result:
+        resCount += 1
 
-    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong, result=result)
+
+    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong, result=result, resCount=resCount)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -226,7 +230,8 @@ def reset_token(token):
 @app.route("/facility_info", methods=['GET', 'POST'])
 def facility_info():
     selected_facility = request.args.get('type')
-    return render_template('facility_info.html', selected_facility=selected_facility, )
+    selected_facility_list = selected_facility[1:-1].split(", ")
+    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list)
 
 
 @app.route("/search_results")
