@@ -227,3 +227,9 @@ def reset_token(token):
 @app.route("/facility_info")
 def facility_info():
     return render_template('facility_info.html')
+
+
+# temporary way of accessing Facility Info page
+@app.route("/search_results")
+def search_results():
+    return render_template('search_results.html')

@@ -22,7 +22,7 @@ def getcarparkinfo(cpno):
 
 # for testing reasons:
 def main():
-    carpark = getcarparkinfo("HE12")
+    carpark = getcarparkinfo("TM31")
     print(carpark)
 
 main()
