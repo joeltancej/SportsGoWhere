@@ -9,6 +9,7 @@ from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 import mysql.connector
+from NearestFinder.nearestCarparks import *
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -231,8 +232,22 @@ def reset_token(token):
 def facility_info():
     selected_facility = request.args.get('type')
     selected_facility_list = selected_facility[1:-1].split(", ")
-    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list)
 
+    lat = selected_facility_list[0]
+    long = selected_facility_list[1]
+
+    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, lat=lat, long=long)
+
+
+@app.route("/parking")
+def parking():
+
+    lat = float(request.args.get('lat'))
+    long = float(request.args.get('long'))
+
+    result = nearestCP(lat, long)
+
+    return render_template('parking.html', lat=lat, long=long, result=result)
 
 @app.route("/search_results")
 def search_results():
