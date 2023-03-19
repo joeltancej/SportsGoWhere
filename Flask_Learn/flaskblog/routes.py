@@ -8,6 +8,8 @@ from flaskblog.models import Accounts
 from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
+import mysql.connector
+from NearestFinder.nearestCarparks import *
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -56,6 +58,14 @@ LOCATIONS = {
     'WEST': [1.351326983979124, 103.71833556089194]
 }
 
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="password",
+    database="sportsgowhere"
+)
+
+
 
 SEARCH = {}
 
@@ -86,7 +96,25 @@ def search():
     locationLat = LOCATIONS[location][0]
     locationLong = LOCATIONS[location][1]
 
-    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong)
+    mycursor = mydb.cursor()
+    sql = """select Y, X, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
+	POW(69.1 * (Y - %s), 2) +
+    POW(69.1 * (%s - X) * COS(Y / 57.3), 2)) * 1.60934, 2) as distance
+    from sportsfacilities
+    where FACILITIES like "%""" + activity +"""%"
+    order by distance
+    limit 20;"""
+    
+    value = (locationLat, locationLong)
+    mycursor.execute(sql, value)
+    result = mycursor.fetchall()
+
+    resCount = 0
+    for i in result:
+        resCount += 1
+
+
+    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong, result=result, resCount=resCount)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -200,7 +228,27 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-# temporary way of accessing Facility Info page
-@app.route("/facility_info")
+@app.route("/facility_info", methods=['GET', 'POST'])
 def facility_info():
-    return render_template('facility_info.html')
+    selected_facility = request.args.get('type')
+    selected_facility_list = selected_facility[1:-1].split(", ")
+
+    lat = selected_facility_list[0]
+    long = selected_facility_list[1]
+
+    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, lat=lat, long=long)
+
+
+@app.route("/parking")
+def parking():
+
+    lat = float(request.args.get('lat'))
+    long = float(request.args.get('long'))
+
+    result = nearestCP(lat, long)
+
+    return render_template('parking.html', lat=lat, long=long, result=result)
+
+@app.route("/search_results")
+def search_results():
+    return render_template('search_results.html')

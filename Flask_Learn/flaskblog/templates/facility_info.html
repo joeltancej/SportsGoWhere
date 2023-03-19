@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <h1 class="text-center">Facility Information</h1>
+  <p>test: {{ lat }}<br>{{ long }}</p>
+  <h1 class="text-center">{{ selected_facility_list[2][1:-1] }}</h1>
 
   <div class="container middle">
     <div class="row">
@@ -24,7 +25,7 @@
         <div class="card mt-4">
           <div class="card-body">
             <h5 class="card-title">Sports:</h5>
-            <p class="card-text">Information about sports available.</p>
+            <p class="card-text">{{ selected_facility_list[3][1:-1] }}</p>
           </div>
         </div>
 
@@ -49,8 +50,15 @@
           </div>
         </div>
 
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Contact No:</h5>
+            <p class="card-text">{{ selected_facility_list[5][1:-1] }}</p>
+          </div>
+        </div>
+
         <div class="d-flex justify-content-between mt-4">
-          <a href="{{ url_for('home') }}" class="btn button-17 mr-auto">Parking</a>
+          <a href="{{ url_for('parking', lat=lat, long=long) }}" class="btn button-17 mr-auto">Parking</a>
           <a href="{{ url_for('home') }}" class="btn button-17 mx-auto">Directions</a>
           <a href="{{ url_for('home') }}" class="btn button-17 ml-auto">Food</a>
         </div>
