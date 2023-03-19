@@ -30,14 +30,3 @@ class Accounts(db.Model, UserMixin):
 
     def __repr__(self):
         return f"Accounts('{self.email}', '{self.username}')"
-
-
-# our model
-class UserInfo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
