@@ -63,7 +63,7 @@ LOCATIONS = {
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="password",
+    password="Wushurocks1!",
     database="sportsgowhere"
 )
 
@@ -251,6 +251,14 @@ def parking():
 
     return render_template('parking.html', lat=lat, long=long, result=result)
 
+@app.route("/directions")
+def directions():
+
+    lat = float(request.args.get('lat'))
+    long = float(request.args.get('long'))
+    # name = float(request.args.get('name'))
+
+    return render_template('directions.html', lat=lat, long=long)
 @app.route("/parking_info", methods=['GET', 'POST'])
 def parking_info():
 

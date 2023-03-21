@@ -62,7 +62,7 @@
 
         <div class="d-flex justify-content-between mt-4">
           <a href="{{ url_for('parking', lat=lat, long=long) }}" class="btn button-17 mr-auto">Parking</a>
-          <a href="{{ url_for('home') }}" class="btn button-17 mx-auto">Directions</a>
+          <a href="{{ url_for('directions', name=selected_facility_list[2][1:-1], lat=lat, long=long)}}" class="btn button-17 mx-auto">Directions</a>
           <a href="{{ url_for('home') }}" class="btn button-17 ml-auto">Food</a>
         </div>
       </div>

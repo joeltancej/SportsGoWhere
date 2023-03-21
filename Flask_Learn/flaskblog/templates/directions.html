@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<iframe
+    width="750"
+    height="500"
+    class="center"
+    frameborder="0" style="border:0"
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCs85_IULmdNSTUj21h_m7FK-15Z1F6V4U
+    &origin=Lee+Wee+Nam+Library
+    &destination={{lat}}, {{long}}"
+    allowfullscreen>
+</iframe>
+{% endblock %}
