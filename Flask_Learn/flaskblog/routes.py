@@ -1,5 +1,6 @@
 import os
 import secrets
+import json
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request
 from flaskblog import app, db, bcrypt, mail
@@ -10,6 +11,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 import mysql.connector
 from NearestFinder.nearestCarparks import *
+from APIManagers.carparkmanager import *
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -253,8 +255,11 @@ def parking():
 def parking_info():
 
     res = request.args.get('type')
+    res_dict = json.loads(res.replace("'", "\""))
+    cpno = res_dict['cpno']
+    cpdata = getcarparkinfo(cpno)
 
-    return render_template('parking_info.html', res=res)
+    return render_template('parking_info.html', res=res, cpno=cpno, cpdata=cpdata)
 
 @app.route("/search_results")
 def search_results():
