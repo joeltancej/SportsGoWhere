@@ -239,7 +239,7 @@ def facility_info():
     return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, lat=lat, long=long)
 
 
-@app.route("/parking")
+@app.route("/parking", methods=['GET', 'POST'])
 def parking():
 
     lat = float(request.args.get('lat'))
@@ -257,6 +257,12 @@ def directions():
     # name = float(request.args.get('name'))
 
     return render_template('directions.html', lat=lat, long=long)
+@app.route("/parking_info", methods=['GET', 'POST'])
+def parking_info():
+
+    res = request.args.get('type')
+
+    return render_template('parking_info.html', res=res)
 
 @app.route("/search_results")
 def search_results():
