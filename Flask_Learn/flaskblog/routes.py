@@ -10,6 +10,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 import mysql.connector
 from NearestFinder.nearestCarparks import *
+from NearestFinder.geoloc import *
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -83,6 +84,16 @@ def home():
         return redirect(url_for('search', sports = SPORTS, locations = LOCATIONS))
     else: 
         return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
+    
+@app.route("/currentloc", methods = ['POST', 'GET'])
+def currentloc():
+    if request.method == 'POST':
+        ACTIVITY = request.args.get("activities")
+        LOCATION = request.args.get("location")
+        return redirect(url_for('search', sports = SPORTS, locations = LOCATIONS))
+    else: 
+        lat, long = getgeoloc()
+        return render_template('currentloc.html', sports = SPORTS, locations = LOCATIONS, lat=lat, long=long)
 
 @app.route("/about")
 def about():

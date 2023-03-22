@@ -18,24 +18,9 @@
               <option>{{ location }}</option>
           {% endfor %}
         </select>
-      
-        <button class="get-location-button" onclick="getLocation()">Get my location</button>
-
-        <script>
-        function getLocation() {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          } else {
-            alert("Geolocation is not supported by this browser.");
-          }
-        }
-
-        function showPosition(position) {
-          alert("Latitude: " + position.coords.latitude + 
-          ", Longitude: " + position.coords.longitude);
-          var location = position.coords.latitude + position.coords.longitude; // add function to store location data next time
-        }
-        </script>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{{ url_for('currentloc') }}" class="btn button-17 ml-auto">Use My Location</a>
       </div>
     </div>
 
