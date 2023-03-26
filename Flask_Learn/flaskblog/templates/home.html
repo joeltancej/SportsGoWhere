@@ -3,18 +3,18 @@
 
   <form action ="/search">
     <div class="row activity-chooser">
-      <div class="col-md-6">
+      <div class="col-sm">
         <label for="activities">Activity:</label>
-          <select class="selectpicker" data-live-search="true" name="activities" id="activities">
-          {% for sport in sports %}
+          <select class="form-select" data-live-search="true" name="activities" id="activities" aria-label=".form-select-lg example">
+            {% for sport in sports %}
               <option>{{ sport }}</option>
           {% endfor %}
         </select>
       </div>
-      <div class="col-md-6">
+      <div class="col-sm">
         <label for="location">Location:</label>
-          <select class="selectpicker" data-live-search="true" name="location" id="location">
-          {% for location in locations %}
+          <select class="form-select" data-live-search="true" name="location" id="location" aria-label=".form-select-lg example">
+            {% for location in locations %}
               <option>{{ location }}</option>
           {% endfor %}
         </select>
