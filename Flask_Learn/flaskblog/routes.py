@@ -12,6 +12,7 @@ import mysql.connector
 from NearestFinder.nearestCarparks import *
 from NearestFinder.geoloc import *
 from datetime import timedelta
+from flaskblog.apimanagers import *
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -255,11 +256,13 @@ def reset_token(token):
 def facility_info():
     selected_facility = request.args.get('type')
     selected_facility_list = selected_facility[1:-1].split(", ")
+    airquality, airdescriptor, airadvisory= getpsi("national")
 
     lat = selected_facility_list[0]
     long = selected_facility_list[1]
 
-    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, lat=lat, long=long)
+    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, 
+                           lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory)
 
 
 @app.route("/parking", methods=['GET', 'POST'])
