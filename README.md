@@ -6,7 +6,7 @@ Steps to install and run project:
 3. open run.py file (SportsGowhere -> Flask_Learn -> run.py)
 4. install these packages\
 &emsp; pip install flask\
-&ensp&ensp&ensp&ensp   pip install mysqlclient\
+&ensp;&ensp;&ensp;&ensp;   pip install mysqlclient\
         pip install image\
         pip install flask-wtf\
         pip install email_validator\
