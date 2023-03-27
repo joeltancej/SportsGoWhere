@@ -1,11 +1,11 @@
 # import requests library to make requests and work with API
 import requests
 # import from sgdatetime to get the SGT parameters
-import sgdatetime
+from APIManagers.sgdatetime import *
 
 def getcarparkdata():
     # making a GET request to the API endpoint, obtain output in a dictionary format with .json()
-    response = requests.get("https://api.data.gov.sg/v1/transport/carpark-availability", sgdatetime.get_dt()).json()
+    response = requests.get("https://api.data.gov.sg/v1/transport/carpark-availability", get_dt()).json()
     return response["items"][0]["carpark_data"]
 
 def getcarparkinfo(cpno):
@@ -20,9 +20,9 @@ def getcarparkinfo(cpno):
             return toreturn
     return "Error: Carpark Not Found"
 
-# for testing reasons:
-def main():
-    carpark = getcarparkinfo("TM31")
-    print(carpark)
+# # for testing reasons:
+# def main():
+#     carpark = getcarparkinfo("TM31")
+#     print(carpark)
 
-main()
+# main()
