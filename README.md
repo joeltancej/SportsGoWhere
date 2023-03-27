@@ -5,8 +5,8 @@ Steps to install and run project:
 2. open repository in Visual Studio Code
 3. open run.py file (SportsGowhere -> Flask_Learn -> run.py)
 4. install these packages\
-        pip install flask\
-        pip install mysqlclient\
+&ensp&ensp&ensp&ensp   pip install flask\
+&ensp&ensp&ensp&ensp   pip install mysqlclient\
         pip install image\
         pip install flask-wtf\
         pip install email_validator\
