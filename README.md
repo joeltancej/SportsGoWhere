@@ -14,9 +14,8 @@ Steps to install and run project:
 &emsp;&emsp; pip install requests\
 &emsp;&emsp; pip install pandas
   
-5. Download and install MySQL Workbench
-# take note of host, user, password, database name
-# preferably host="localhost", database = 'sportsgowhere',user="root", passwd="password"
+5. Download and install MySQL Workbench (take note of host, user, password, database name)
+(preferably host="localhost", database = 'sportsgowhere',user="root", passwd="password")
 6. Set up local database and connection in MySQL Workbench
 7. On your local database, import the 3 csv files with their respective names (e.g. sportsfacilities.csv as sportsfacilities Table)
 8. On Visual Studio Code, open up the terminal and change directory to Flask_Learn (cd Flask_Learn)
