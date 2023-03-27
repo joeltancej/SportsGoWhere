@@ -11,7 +11,7 @@ Steps to install and run project:
 &emsp;&emsp; pip install flask-wtf\
 &emsp;&emsp; pip install email_validator\
 &emsp;&emsp; pip install flask-mysqldb\
-&emsp;&emsp; pip install requests
+&emsp;&emsp; pip install requests\
 &emsp;&emsp; pip install pandas
   
 5. run run.py
