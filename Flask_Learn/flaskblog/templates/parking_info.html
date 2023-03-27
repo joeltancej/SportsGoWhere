@@ -4,4 +4,24 @@
 
 <p>{{ res }}<br>{{ restype }}<br>{{ cpno }}<br>{{ cpdata }}</p>
 
+<iframe
+    width="500"
+    height="400"
+    frameborder="0" style="border:0"
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCs85_IULmdNSTUj21h_m7FK-15Z1F6V4U
+    &q={{name}}+Carpark"
+    allowfullscreen>
+</iframe>
+
+<table class="table table-dark" style="width:50%">
+    <tbody>
+      <tr>
+        <td style="width:50%">Carpark Availability</td>
+        <td>{{availability}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
 {% endblock %}

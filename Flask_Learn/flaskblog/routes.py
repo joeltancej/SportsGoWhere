@@ -1,6 +1,5 @@
 import os
 import secrets
-import json
 from PIL import Image
 import json
 from flask import render_template, url_for, flash, redirect, session, request
@@ -18,6 +17,7 @@ from flaskblog.apimanagers import *
 from pytz import timezone
 from sqlalchemy.exc import IntegrityError
 import datetime
+import ast
 
 tz = timezone('Asia/Singapore')  # set the timezone to Singapore time
 
@@ -341,11 +341,12 @@ def directions():
 def parking_info():
 
     res = request.args.get('type')
-    res_dict = json.loads(res.replace("'", "\""))
-    cpno = res_dict['cpno']
-    cpdata = getcarparkinfo(cpno)
+    resdic = ast.literal_eval(res)
+    name = resdic['address']
+    cpno = resdic['cpno']
+    availability = getcarparkinfo(cpno)
 
-    return render_template('parking_info.html', res=res, cpno=cpno, cpdata=cpdata)
+    return render_template('parking_info.html', res=res, name=name, availability=availability)
 
 @app.route("/search_results")
 def search_results():
