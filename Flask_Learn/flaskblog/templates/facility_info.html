@@ -12,7 +12,7 @@
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-2 mt-2">
-            <a href="{{ url_for('home') }}" class="btn button-17">Back to searches</a>
+            <a href="javascript:history.back()" class="btn button-17">Back to searches</a>
           </div>
           <div class="col-md-10 text-right mt-2">
             <a href="{{ url_for('home') }}" class="btn button-17">Reviews</a>
@@ -48,8 +48,9 @@
 
         <div class="card mt-4">
           <div class="card-body">
-            <h5 class="card-title">Air Quality:</h5>
-            <p class="card-text">Information about air quality.</p>
+            <h5 class="card-title">Air Quality (µg/m3):</h5>
+            <p class="card-text">{{airquality}} ({{airdescriptor}})</p>
+            <p1 class="card-text">{{airadvisory}}</p1>
           </div>
         </div>
 

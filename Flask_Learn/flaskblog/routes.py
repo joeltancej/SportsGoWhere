@@ -2,7 +2,7 @@ import os
 import secrets
 import json
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, session, request
 from flaskblog import app, db, bcrypt, mail
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
 from flaskblog.models import Accounts
@@ -11,7 +11,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 import mysql.connector
 from NearestFinder.nearestCarparks import *
-from APIManagers.carparkmanager import *
+from NearestFinder.geoloc import *
+from datetime import timedelta
+from flaskblog.apimanagers import *
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -67,7 +69,10 @@ mydb = mysql.connector.connect(
     database="sportsgowhere"
 )
 
-
+# secret key
+app.secret_key = "sportsgowhere"
+# session lifetime
+app.permanent_session_lifetime = timedelta(minutes = 5)
 
 SEARCH = {}
 
@@ -84,7 +89,21 @@ def home():
         LOCATION = request.args.get("location")
         return redirect(url_for('search', sports = SPORTS, locations = LOCATIONS))
     else: 
+        session["loc"] = "region"
         return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
+    
+@app.route("/currentloc", methods = ['POST', 'GET'])
+def currentloc():
+    if request.method == 'POST':
+        ACTIVITY = request.args.get("activities")
+        LOCATION = request.args.get("location")
+        return redirect(url_for('search', sports = SPORTS, locations = LOCATIONS))
+    else: 
+        session["loc"] = "user"
+        lat, long = getgeoloc()
+        session["lat"] = lat
+        session["long"] = long
+        return render_template('currentloc.html', sports = SPORTS, locations = LOCATIONS, lat=lat, long=long)
 
 @app.route("/about")
 def about():
@@ -93,10 +112,14 @@ def about():
 @app.route("/search", methods = ['POST', 'GET'])
 def search():
     activity = request.args.get("activities")
-    location = request.args.get("location")
     activity = SPORTS[activity]
-    locationLat = LOCATIONS[location][0]
-    locationLong = LOCATIONS[location][1]
+    if session["loc"] == "region":
+        location = request.args.get("location")
+        locationLat = LOCATIONS[location][0]
+        locationLong = LOCATIONS[location][1]
+    else:
+        locationLat = session["lat"]
+        locationLong = session["long"]
 
     mycursor = mydb.cursor()
     sql = """select Y, X, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
@@ -116,7 +139,7 @@ def search():
         resCount += 1
 
 
-    return render_template('search.html', title='Search results', activity=activity, location = location, locationLat=locationLat, locationLong=locationLong, result=result, resCount=resCount)
+    return render_template('search.html', title='Search results', activity=activity, locationLat=locationLat, locationLong=locationLong, result=result, resCount=resCount)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -234,11 +257,13 @@ def reset_token(token):
 def facility_info():
     selected_facility = request.args.get('type')
     selected_facility_list = selected_facility[1:-1].split(", ")
+    airquality, airdescriptor, airadvisory= getpsi("national")
 
     lat = selected_facility_list[0]
     long = selected_facility_list[1]
 
-    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, lat=lat, long=long)
+    return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, 
+                           lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory)
 
 
 @app.route("/parking", methods=['GET', 'POST'])
@@ -256,9 +281,11 @@ def directions():
 
     lat = float(request.args.get('lat'))
     long = float(request.args.get('long'))
+    clat, clong = getgeoloc()
     # name = float(request.args.get('name'))
 
-    return render_template('directions.html', lat=lat, long=long)
+    return render_template('directions.html', lat=lat, long=long, clat=clat, clong=clong)
+
 @app.route("/parking_info", methods=['GET', 'POST'])
 def parking_info():
 
