@@ -5,7 +5,8 @@
     <p>test: {{ lat }}<br>{{ long }}</p>
   -->
 
-  <h1 class="text-center">{{ selected_facility_list[2][1:-1] }}</h1>
+  <h1 class="text-center">{{ selected_facility_list[3][1:-1] }}</h1>
+  <p>Selected Facility GID: {{ selected_facility_list[2] }}</p>
   
   <div class="container middle">
     <div class="row">
@@ -18,11 +19,15 @@
             <a href="{{ url_for('home') }}" class="btn button-17">Reviews</a>
           </div>
           <div class="col-md-12 text-right mt-4">
-            <label for="id-of-input" class="custom-checkbox">
-              <input type="checkbox" id="id-of-input"/>
-              <span>Favorite</span>
-            </label>
-          </div>
+            <form method="post" action="{{ url_for('save_favorite', lat=lat, long=long) }}">
+              <label for="id-of-input" class="custom-checkbox">
+                <input type="checkbox" id="id-of-input" name="is_favorite"/>
+                <span>Favorite</span>
+              </label>
+              <input type="hidden" name="selected_facility_list_gid" value="{{ selected_facility_list[2] }}">
+              <button type="submit" class="btn button-17">Save</button>
+            </form>
+          </div>          
         </div>
 
         <div class="card mt-4">
@@ -57,13 +62,13 @@
         <div class="card mt-4">
           <div class="card-body">
             <h5 class="card-title">Contact No:</h5>
-            <p class="card-text">{{ selected_facility_list[5][1:-1] }}</p>
+            <p class="card-text">{{ selected_facility_list[6][1:-1] }}</p>
           </div>
         </div>
 
         <div class="d-flex justify-content-between mt-4">
           <a href="{{ url_for('parking', lat=lat, long=long) }}" class="btn button-17 mr-auto">Parking</a>
-          <a href="{{ url_for('directions', name=selected_facility_list[2][1:-1], lat=lat, long=long)}}" class="btn button-17 mx-auto">Directions</a>
+          <a href="{{ url_for('directions', name=selected_facility_list[3][1:-1], lat=lat, long=long)}}" class="btn button-17 mx-auto">Directions</a>
           <a href="{{ url_for('home') }}" class="btn button-17 ml-auto">Food</a>
         </div>
       </div>

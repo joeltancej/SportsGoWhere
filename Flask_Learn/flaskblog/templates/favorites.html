@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="content" class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h4 class="nomargin">My Favorite Facilities</h4>
+            <hr class="nomargin-bottom margin-top-10">
+            {% if not facilities %}
+                <p>You haven't added any favorite facilities yet.</p>
+            {% else %}
+                {% for facility in facilities %}
+                    <div class="clearfix search-result"><!-- item -->
+                        <h4><a href="{{url_for('facility_info', type=[facility], source='favorites')}}"> {{ facility.Name }}</a></h4>
+                        <br>
+                        <p>Facilities: {{ facility.FACILITIES }}</p>
+                    </div><!-- /item -->
+                {% endfor %}
+            {% endif %} 
+        </div>
+    </div>
+</div>
+{% endblock content %}

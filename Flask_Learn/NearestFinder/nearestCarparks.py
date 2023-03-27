@@ -9,7 +9,7 @@ import mysql.connector as connection
 def nearestCP(lat, long):
     # replace password with your own password here
     try:
-        mydb = connection.connect(host="localhost", database = 'sportsgowhere',user="root", passwd="password!",use_pure=True)
+        mydb = connection.connect(host="localhost", database = 'sportsgowhere',user="root", passwd="password",use_pure=True)
         query = "Select * from hdbcarparks;"
         hdbcarparks = pd.read_sql(query,mydb)
         mydb.close() #close the connection

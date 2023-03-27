@@ -1,10 +1,11 @@
 import os
 import secrets
 from PIL import Image
+import json
 from flask import render_template, url_for, flash, redirect, session, request
 from flaskblog import app, db, bcrypt, mail
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
-from flaskblog.models import Accounts
+from flaskblog.models import Accounts, Favorites, SportsFacilities, RecentSearches
 from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
@@ -13,6 +14,11 @@ from NearestFinder.nearestCarparks import *
 from NearestFinder.geoloc import *
 from datetime import timedelta
 from flaskblog.apimanagers import *
+from pytz import timezone
+from sqlalchemy.exc import IntegrityError
+import datetime
+
+tz = timezone('Asia/Singapore')  # set the timezone to Singapore time
 
 SPORTS = {
     'Badminton': 'Sports Hall',
@@ -64,7 +70,7 @@ LOCATIONS = {
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Wushurocks1!",
+    password="password",
     database="sportsgowhere"
 )
 
@@ -121,7 +127,7 @@ def search():
         locationLong = session["long"]
 
     mycursor = mydb.cursor()
-    sql = """select Y, X, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
+    sql = """select Y, X, gid, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
 	POW(69.1 * (Y - %s), 2) +
     POW(69.1 * (%s - X) * COS(Y / 57.3), 2)) * 1.60934, 2) as distance
     from sportsfacilities
@@ -255,11 +261,56 @@ def reset_token(token):
 @app.route("/facility_info", methods=['GET', 'POST'])
 def facility_info():
     selected_facility = request.args.get('type')
-    selected_facility_list = selected_facility[1:-1].split(", ")
-    airquality, airdescriptor, airadvisory= getpsi("national")
+    source = request.args.get('source')  # retrieve the source parameter
+    if source == 'favorites' or source == 'recentsearches':
+        # Convert the selected_facility to int
+        selected_facility_str = str(selected_facility)
+        facility_gid = selected_facility_str.split()[1][:-1]
+        # Convert gid string to integer
+        facility_gid = int(facility_gid.strip('<>SportsFacilities '))
+
+        # Query SportsFacilities table to get matching facility
+        facility = SportsFacilities.query.filter_by(gid=facility_gid).first()
+
+        # Convert facility attributes to a list
+        selected_facility_list = [facility.X, facility.Y, facility.gid, '"' + facility.Name + '"', facility.description, facility.FACILITIES, facility.ROAD_NAME, '"' + facility.CONTACT_NO + '"', facility.GYM, facility.INC_CRC, facility.FMEL_UPD_D]
+    elif source == 'save_favorite':
+        selected_facility_list = request.args.get('selected_facility_list').split('|')
+        
+    else:
+        selected_facility_list = selected_facility[1:-1].split(", ")
 
     lat = selected_facility_list[0]
     long = selected_facility_list[1]
+    gid = selected_facility_list[2]
+
+    timestamp = datetime.datetime.now(tz=tz)  # create a datetime object with the specified timezone
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        # Insert new record into recentsearches, or update timestamp if a record with the same primary key exists
+        try:
+            recent_search = RecentSearches(raccount_id=user_id, rfacility_id=gid, timestamp=timestamp)
+            db.session.add(recent_search)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            existing_search = RecentSearches.query.filter_by(raccount_id=user_id, rfacility_id=gid).first()
+            existing_search.timestamp = timestamp
+            db.session.commit()
+        # Check number of recent searches for the user
+        num_recent_searches = RecentSearches.query.filter_by(raccount_id=user_id).count()
+
+        # If the number of recent searches exceeds 5, delete the excess records
+        if num_recent_searches > 5:
+            excess_searches = RecentSearches.query.filter_by(raccount_id=user_id).order_by(RecentSearches.timestamp.asc()).limit(num_recent_searches - 4).all()
+            for search in excess_searches:
+                db.session.delete(search)
+            db.session.commit()
+
+    session['lat'] = lat
+    session['long'] = long
+    session['selected_facility_list'] = selected_facility_list
+    airquality, airdescriptor, airadvisory= getpsi("national")
 
     return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, 
                            lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory)
@@ -289,9 +340,85 @@ def directions():
 def parking_info():
 
     res = request.args.get('type')
+    res_dict = json.loads(res.replace("'", "\""))
+    cpno = res_dict['cpno']
+    cpdata = getcarparkinfo(cpno)
 
-    return render_template('parking_info.html', res=res)
+    return render_template('parking_info.html', res=res, cpno=cpno, cpdata=cpdata)
 
 @app.route("/search_results")
 def search_results():
     return render_template('search_results.html')
+
+
+@app.route('/save_favorite', methods=['POST'])
+@login_required
+def save_favorite():
+    facility_gid = request.form['selected_facility_list_gid']
+    is_favorite = request.form.get('is_favorite', False)
+    account_id = current_user.id
+
+    # Get the facility ID from the SportsFacilities table using the facility_gid
+    facility = SportsFacilities.query.filter_by(gid=facility_gid).first()
+    if facility is None:
+        flash('Facility not found.', 'danger')
+        return redirect(url_for('home'))
+    
+    facility_id = facility.gid
+
+    # Check if the record already exists in the favorites table
+    existing_favorite = Favorites.query.filter_by(account_id=account_id, facility_id=facility_id).first()
+    
+    if is_favorite:
+        if not existing_favorite:
+            # Insert a new record if it doesn't exist
+            favorite = Favorites(account_id=account_id, facility_id=facility_id)
+            db.session.add(favorite)
+            db.session.commit()
+            flash('The facility has been added to your favorites!', 'success')
+        else:
+            flash('The facility is already in your favorites!', 'danger')
+    else:
+        if existing_favorite:
+            # Delete the existing record if it exists
+            db.session.delete(existing_favorite)
+            db.session.commit()
+            flash('The facility has been removed from your favorites.', 'success')
+        else:
+            flash('The facility is not in your favorites!', 'danger')
+
+    lat = session.get('lat')
+    long = session.get('long')
+    selected_facility_list = session.get('selected_facility_list')
+    selected_facility_list = [str(elem) for elem in selected_facility_list]
+    return redirect(url_for('facility_info', selected_facility_list='|'.join(selected_facility_list), source='save_favorite'))
+
+
+@app.route('/favorites')
+@login_required
+def favorites():
+    user_id = current_user.id
+    favorites = Favorites.query.filter_by(account_id=user_id).all()
+
+    facilities = []
+    for favorite in favorites:
+        facility = SportsFacilities.query.filter_by(gid=favorite.facility_id).first()
+        if facility:
+            facilities.append(facility)
+
+    return render_template('favorites.html', title='Favorites', facilities=facilities, source='favorites')
+
+
+@app.route('/recentsearches')
+@login_required
+def recentsearches():
+    user_id = current_user.id
+    recentsearches = RecentSearches.query.filter_by(raccount_id=user_id).all()
+
+    facilities = []
+    for recentsearch in recentsearches:
+        facility = SportsFacilities.query.filter_by(gid=recentsearch.rfacility_id).first()
+        if facility:
+            facilities.append(facility)
+
+    return render_template('recentsearches.html', title='Recent Searches', facilities=facilities, source='recentsearches')
