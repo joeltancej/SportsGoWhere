@@ -63,7 +63,7 @@ LOCATIONS = {
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Wushurocks1!",
+    password="password",
     database="sportsgowhere"
 )
 
