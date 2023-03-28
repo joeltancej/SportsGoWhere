@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<div class="jumbotron jumbotron-fluid d-flex align-items-center" style="height: 70px;">
+  <div class="container text-center">
+    <h1 class="display-7">SportsGoWhere</h1>
+    <p class="lead">Select an activity and location to find the sports facilities nearest to you!</p>
+  </div>
+</div>
+<h1 style="margin-bottom: -160px;">
+</h1>
   <form action ="/search">
     <div class="row activity-chooser">
       <div class="col-sm">
@@ -23,7 +31,8 @@
         <a href="{{ url_for('currentloc') }}" class="btn button-17 ml-auto">Use My Location</a>
       </div>
     </div>
-
+    <h1 style="margin-bottom: -130px;">
+    </h1>
     <div class="col-md-12 text-center">
       <a href=home><button type="submit" class="btn btn-dark btn-lg search-btn">Search</button></a>
     </div>

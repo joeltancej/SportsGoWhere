@@ -11,6 +11,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 import mysql.connector
 from NearestFinder.nearestCarparks import *
+from NearestFinder.nearestEateries import *
 from NearestFinder.geoloc import *
 from datetime import timedelta
 from flaskblog.apimanagers import *
@@ -329,6 +330,16 @@ def parking():
     result = nearestCP(lat, long)
 
     return render_template('parking.html', lat=lat, long=long, result=result)
+
+@app.route("/eateries", methods=['GET', 'POST'])
+def eateries():
+
+    lat = float(request.args.get('lat'))
+    long = float(request.args.get('long'))
+
+    result = nearestHE(lat, long)
+
+    return render_template('eateries.html', lat=lat, long=long, result=result)
 
 @app.route("/directions")
 def directions():

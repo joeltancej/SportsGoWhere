@@ -1,11 +1,12 @@
 import pandas as pd
 from NearestFinder.findNearest import *
 import mysql.connector as connection
+from NearestFinder.chatbot import *
 # this function returns a dictionary containing the information of the nearest 3 carparks
 # the information for every carpark is contained in a dictionary containing the address, carpark number (needed for carpark API),
 # and the distance (in metres) from the particular location (lat, long) to the carpark
 
-def nearestCP(lat, long):
+def nearestHE(lat, long):
     # replace password with your own password here
     try:
         mydb = connection.connect(host="localhost", database = 'sportsgowhere',user="root", passwd="password",use_pure=True)
@@ -19,24 +20,31 @@ def nearestCP(lat, long):
     # getting carparks dataset as a dataframe
     # hdbcarparks = pd.read_excel("Datasets/hdbcarparks(converted).xlsx")
     # Renaming the column names 
-    healthiereateries=healthiereateries.rename(columns = {'X':'lat','Y':'lon'})
+    healthiereateries=healthiereateries.rename(columns = {'Y':'lat','X':'lon'})
     nearestname = find_nearest(lat, long, healthiereateries, "Name" )
-    nearestblk = find_nearest(lat, long, healthiereateries, "ADDRESSBLOCKHOUSENUMBER" )
-    nearestbld = find_nearest(lat, long, healthiereateries, "ADDRESSBUILDINGNAME" )
-    nearestpos = find_nearest(lat, long, healthiereateries, "ADDRESSPOSTALCODE" )
-    nearestst = find_nearest(lat, long, healthiereateries, "ADDRESSSTREETNAME" )
-    result = {"first":{"name":nearestname[0], "blk":nearestblk[0], "bld":nearestbld[0], "pos":nearestpos[0], "st":nearestst[0]},
-              "second":{"name":nearestname[1], "cpno":nearestblk[1], "bld":nearestbld[1], "pos":nearestpos[1], "st":nearestst[1]},
-              "third":{"name":nearestname[2], "blk":nearestblk[2], "bld":nearestbld[2]}, "pos":nearestpos[2], "st":nearestst[2]}
+    nearestlat = find_nearest(lat, long, healthiereateries, "lat" )
+    nearestlon = find_nearest(lat, long, healthiereateries, "lon" )
+    healthieroptions = []
+    for name in nearestname:
+        query = "What healthy options are there at" + name + " Singapore? Answer in at most 50 words."
+        healthieroptions.append(chatgpt(query))
+    # nearestblk = find_nearest(lat, long, healthiereateries, "ADDRESSBLOCKHOUSENUMBER" )
+    # nearestbld = find_nearest(lat, long, healthiereateries, "ADDRESSBUILDINGNAME" )
+    # nearestpos = find_nearest(lat, long, healthiereateries, "ADDRESSPOSTALCODE" )
+    # nearestst = find_nearest(lat, long, healthiereateries, "ADDRESSSTREETNAME" )
+    nearestdist = find_nearest(lat, long, healthiereateries, "distance" )
+    result = {"first":{"name":nearestname[0], "dist":nearestdist[0], "lat":nearestlat[0], "lon":nearestlon[0], "healthieroptions":healthieroptions[0]},
+              "second":{"name":nearestname[1], "dist":nearestdist[1], "lat":nearestlat[1], "lon":nearestlon[1], "healthieroptions":healthieroptions[1]},
+              "third":{"name":nearestname[2], "dist":nearestdist[2], "lat":nearestlat[2], "lon":nearestlon[2], "healthieroptions":healthieroptions[2]}}
     for i in range(3):
         print(nearestname[i], end=" ")
-        print(nearestblk[i], end=" ")
-        print(nearestbld[i], end=" ")
-        print(nearestpos[i], end=" ")
-        print(nearestst[i])
+        # print(nearestblk[i], end=" ")
+        # print(nearestbld[i], end=" ")
+        # print(nearestpos[i], end=" ")
+        # print(nearestst[i])
     return result
     
 #     for testing purposes
     
 
-nearestCP(103.93721, 1.35961)
+# nearestCP(103.93721, 1.35961)

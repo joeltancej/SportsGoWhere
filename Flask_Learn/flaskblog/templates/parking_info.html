@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<p>{{ res }}<br>{{ name }}<br>{{ cpno }}<br>{{ cpdata }}</p>
+<!-- <p>{{ res }}<br>{{ name }}<br>{{ cpno }}<br>{{ cpdata }}</p> -->
 <iframe
     width="500"
     height="400"
@@ -13,13 +13,13 @@
     allowfullscreen>
 </iframe>
 
-<table class="table table-bordered table-dark" style="width:45%">
-    <tbody>
+<table class="table table-bordered table-active" style="width:45%">
+    <thead>
       <tr>
-        <td style="width:40%">Carpark Availability:</td>
-        <td>{{availability}}</td>
+        <td style="width:40%; text-align:center;"><b>Carpark Availability:</b></td>
+        <td style="text-align: center"><b>{{availability}}</b></td>
       </tr>
-    </tbody>
+    </thead>
   </table>
 
 

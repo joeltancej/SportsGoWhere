@@ -8,6 +8,24 @@ import pandas as pd
 # for the math
 from math import radians, cos, sin, asin, sqrt
 
+import openai
+
+def chatgpt(query):
+    openai.api_key = "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"
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+                {"role": "system", "content": "You are a chatbot"},
+                {"role": "user", "content": query},
+            ]
+    )
+    
+    result = ''
+    for choice in response.choices:
+        result += choice.message.content
+    
+    return result
+
 def getcarparkdata():
     # making a GET request to the API endpoint, obtain output in a dictionary format with .json()
     response = requests.get("https://api.data.gov.sg/v1/transport/carpark-availability", get_dt()).json()
