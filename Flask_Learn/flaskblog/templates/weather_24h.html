@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Today's Forecast:</h1>
+<p></p>
+<table class="table table-bordered table-light" style="width:80%">
+    <thead class="table-info">
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col">12am - 6am</th>
+          <th scope="col">6am - 12pm</th>
+          <th scope="col">12pm - 6pm</th>
+          <th scope="col">6pm - 12am</th>
+        </tr>
+      </thead>
+    <tbody>
+        <tr>
+            <th scope="row">West</th>
+            {% for info in weather %}
+            <td>{{info['west']}}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th scope="row">East</th>
+            {% for info in weather %}
+            <td>{{info['east']}}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th scope="row">Central</th>
+            {% for info in weather %}
+            <td>{{info['central']}}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th scope="row">South</th>
+            {% for info in weather %}
+            <td>{{info['south']}}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th scope="row">North</th>
+            {% for info in weather %}
+            <td>{{info['north']}}</td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}

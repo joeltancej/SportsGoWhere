@@ -29,9 +29,29 @@
             <div class="navbar-nav mr-auto">
               {% if current_user.is_authenticated %}
                 <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Weather
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{{ url_for('weather_24h') }}">24-hour Weather Forecast</a>
+                    <a class="dropdown-item" href="{{ url_for('weather_4day') }}">4-Day Weather Forecast</a>
+                  </div>
+                </li>
+                <a class="nav-item nav-link" href="{{ url_for('psi') }}">PSI</a>
                 <a class="nav-item nav-link" href="{{ url_for('recentsearches') }}">Recent Searches</a>
               {% else %}
                 <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Weather
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{{ url_for('weather_24h') }}">24-hour Weather Forecast</a>
+                    <a class="dropdown-item" href="{{ url_for('weather_4day') }}">4-Day Weather Forecast</a>
+                  </div>
+                </li>
+                <a class="nav-item nav-link" href="{{ url_for('psi') }}">PSI</a>
               {% endif %}
             </div>
             <!-- Navbar Right Side -->

@@ -2,22 +2,21 @@
 
 {% block content %}
 
-<p>{{ res }}<br>{{ restype }}<br>{{ cpno }}<br>{{ cpdata }}</p>
-
+<p>{{ res }}<br>{{ name }}<br>{{ cpno }}<br>{{ cpdata }}</p>
 <iframe
     width="500"
     height="400"
     frameborder="0" style="border:0"
     referrerpolicy="no-referrer-when-downgrade"
     src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCs85_IULmdNSTUj21h_m7FK-15Z1F6V4U
-    &q={{name}}+Carpark"
+    &q={{name}}+Carpark+{{cpno}}"
     allowfullscreen>
 </iframe>
 
-<table class="table table-dark" style="width:50%">
+<table class="table table-bordered table-dark" style="width:45%">
     <tbody>
       <tr>
-        <td style="width:50%">Carpark Availability</td>
+        <td style="width:40%">Carpark Availability:</td>
         <td>{{availability}}</td>
       </tr>
     </tbody>

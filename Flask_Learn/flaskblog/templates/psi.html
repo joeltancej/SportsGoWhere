@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Today's PSI:</h1>
+<p></p>
+<table class="table table-bordered table-light" style="width:50%">
+    <thead class="table-info">
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col" style="width:14%">National</th>
+          <th scope="col" style="width:14%">West</th>
+          <th scope="col" style="width:14%">East</th>
+          <th scope="col" style="width:14%">Central</th>
+          <th scope="col" style="width:14%">South</th>
+          <th scope="col" style="width:14%">North</th>
+        </tr>
+      </thead>
+    <tbody>
+        <tr>
+            <th scope="row">PSI</th>
+            <td>{{readings[1]}}</td>
+            <td>{{readings[0]}}</td>
+            <td>{{readings[2]}}</td>
+            <td>{{readings[3]}}</td>
+            <td>{{readings[4]}}</td>
+            <td>{{readings[5]}}</td>
+        </tr>
+    </tbody>
+</table>
+<button type="button" class="btn btn-outline-success" onclick="window.location.href='https://www.haze.gov.sg/';">Haze Advisory (NEA)</button>
+
+
+{% endblock %}

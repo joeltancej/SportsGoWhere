@@ -311,10 +311,13 @@ def facility_info():
     session['lat'] = lat
     session['long'] = long
     session['selected_facility_list'] = selected_facility_list
-    airquality, airdescriptor, airadvisory= getpsi("national")
+    airquality, airdescriptor, airadvisory, psiarea= getpsi(selected_facility_list[0], selected_facility_list[1])
+
+    region, forecast = getcurweather(selected_facility_list[0], selected_facility_list[1])
 
     return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, 
-                           lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory)
+                           lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory, 
+                           psiarea=psiarea, forecast=forecast, region=region)
 
 
 @app.route("/parking", methods=['GET', 'POST'])
@@ -343,10 +346,11 @@ def parking_info():
     res = request.args.get('type')
     resdic = ast.literal_eval(res)
     name = resdic['address']
+    name = (name.split('/'))[0]
     cpno = resdic['cpno']
     availability = getcarparkinfo(cpno)
 
-    return render_template('parking_info.html', res=res, name=name, availability=availability)
+    return render_template('parking_info.html', res=res, name=name, availability=availability, cpno=cpno)
 
 @app.route("/search_results")
 def search_results():
@@ -424,3 +428,18 @@ def recentsearches():
             facilities.append(facility)
 
     return render_template('recentsearches.html', title='Recent Searches', facilities=facilities, source='recentsearches')
+
+@app.route('/weather_24h')
+def weather_24h():
+    weather = get24hweather()
+    return render_template('weather_24h.html', weather=weather)
+
+@app.route('/weather_4day')
+def weather_4day():
+    weather, dates, temp = get4dayweather()
+    return render_template('weather_4day.html', weather=weather, dates=dates, temp=temp)
+
+@app.route('/psi')
+def psi():
+    regions, readings = getfullpsi()
+    return render_template('psi.html', regions=regions, readings=readings)
