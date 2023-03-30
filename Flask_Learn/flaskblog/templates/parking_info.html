@@ -14,13 +14,15 @@
 </iframe>
 
 <table class="table table-bordered table-active" style="width:45%">
-    <thead>
-      <tr>
-        <td style="width:40%; text-align:center;"><b>Carpark Availability:</b></td>
-        <td style="text-align: center"><b>{{availability}}</b></td>
-      </tr>
-    </thead>
-  </table>
+  <thead>
+    <tr>
+      <td style="width:40%; text-align:center;"><b>Carpark Availability:</b></td>
+      <td style="width:45%; text-align: center"><b>{{availability}}</b></td>
+      <td style="text-align: center"><a href="#" onclick="location.reload();">Refresh<i class="fas fa-sync-alt"></i></a></td>
+    </tr>
+  </thead>
+</table>
+
 
 
 {% endblock %}

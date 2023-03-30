@@ -16,7 +16,7 @@
         <div class="clearfix search-result"><!-- item -->
             <h4><a href="{{url_for('parking_info', type=result[res])}}">{{ result[res]['address'] }}</a></h4>
             <small class="text-success">Distance: {{ result[res]['dist'] }}m</small>
-            <p>Address: {{ result[res]['address'] }}</p>
+            <p>Duration: {{ result[res]['duration'] }} minutes away</p>
         </div><!-- /item -->
         {% endfor %}
         <!-- /SEARCH RESULTS -->

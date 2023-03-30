@@ -24,13 +24,10 @@ def nearestCP(lat, long):
     nearestadd = find_nearest(lat, long, hdbcarparks, "address" )
     nearestcpno = find_nearest(lat, long, hdbcarparks, "car_park_no" )
     nearestdist = find_nearest(lat, long, hdbcarparks, "distance" )
-    result = {"first":{"address":nearestadd[0], "cpno":nearestcpno[0], "dist":nearestdist[0]},
-              "second":{"address":nearestadd[1], "cpno":nearestcpno[1], "dist":nearestdist[1]},
-              "third":{"address":nearestadd[2], "cpno":nearestcpno[2], "dist":nearestdist[2]},}
-    for i in range(3):
-        print(nearestadd[i], end=" ")
-        print(nearestcpno[i], end=" ")
-        print(nearestdist[i])
+    result = {"first":{"address":nearestadd[0], "cpno":nearestcpno[0], "dist":nearestdist[0], "duration":round(nearestdist[0]/(1.4*60))},
+              "second":{"address":nearestadd[1], "cpno":nearestcpno[1], "dist":nearestdist[1], "duration":round(nearestdist[1]/(1.4*60))},
+              "third":{"address":nearestadd[2], "cpno":nearestcpno[2], "dist":nearestdist[2], "duration":round(nearestdist[2]/(1.4*60))}}
+    
     return result
     
 #     for testing purposes
