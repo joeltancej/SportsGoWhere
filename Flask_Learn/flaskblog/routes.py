@@ -111,10 +111,52 @@ def currentloc():
         session["lat"] = lat
         session["long"] = long
         return render_template('currentloc.html', sports = SPORTS, locations = LOCATIONS, lat=lat, long=long)
+    
+@app.route("/secondloc")
+def secondloc():
+    firstlocation = request.args.get("location")
+    sport = request.args.get("activities")
+
+    return render_template('secondloc.html', sport=sport, firstlocation=firstlocation, locations=LOCATIONS)
 
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+@app.route("/search2loc", methods=['POST', 'GET'])
+def search2loc():
+    activity = request.args.get("activities")
+    activity = SPORTS[activity]
+    firstlocation = request.args.get("firstlocation")
+    secondlocation = request.args.get("secondlocation")
+    if session["loc"] == "region":
+        locationLat1 = LOCATIONS[firstlocation][0]
+        locationLong1 = LOCATIONS[firstlocation][1]
+    else:
+        locationLat1 = session["lat"]
+        locationLong1 = session["long"]
+    locationLat2 = LOCATIONS[secondlocation][0]
+    locationLong2 = LOCATIONS[secondlocation][1]
+    locationLat, locationLong = float((locationLat1+locationLat2)/2), float((locationLong1+locationLong2)/2)
+    mycursor = mydb.cursor()
+    sql = """select Y, X, gid, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
+	POW(69.1 * (Y - %s), 2) +
+    POW(69.1 * (%s - X) * COS(Y / 57.3), 2)) * 1.60934, 2) as distance
+    from sportsfacilities
+    where FACILITIES like "%""" + activity +"""%"
+    order by distance
+    limit 20;"""
+    
+    value = (locationLat, locationLong)
+    mycursor.execute(sql, value)
+    result = mycursor.fetchall()
+
+    resCount = 0
+    for i in result:
+        resCount += 1
+
+
+    return render_template('search.html', title='Search results', activity=activity, locationLat=locationLat, locationLong=locationLong, result=result, resCount=resCount)
 
 @app.route("/search", methods = ['POST', 'GET'])
 def search():
@@ -339,7 +381,15 @@ def eateries():
 
     result = nearestHE(lat, long)
 
+
     return render_template('eateries.html', lat=lat, long=long, result=result)
+
+@app.route("/eaterymap", methods=['GET', 'POST'])
+def eaterymap():
+    name = request.args.get('name')
+    street = request.args.get('st')
+
+    return render_template('eaterymap.html', name=name, street=street)
 
 @app.route("/directions")
 def directions():
