@@ -79,7 +79,7 @@ mydb = mysql.connector.connect(
 # secret key
 app.secret_key = "sportsgowhere"
 # session lifetime
-app.permanent_session_lifetime = timedelta(minutes = 5)
+app.permanent_session_lifetime = timedelta(minutes = 10)
 
 SEARCH = {}
 
