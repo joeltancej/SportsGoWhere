@@ -3,14 +3,17 @@
 {% block content %}
 <h1>Today's Forecast:</h1>
 <p></p>
-<table class="table table-bordered table-light" style="width:80%">
+<table class="table table-bordered table-light" style="width:100%">
     <thead class="table-info">
         <tr>
-          <th scope="col">Region</th>
-          <th scope="col">12am - 6am</th>
+            <th scope="col">Region</th>
+            {% for i in range(length) %}
+            <td><b>{{starttime[i]}} - {{endtime[i]}}</b></td>
+            {% endfor %}
+          <!-- <th scope="col">12am - 6am</th>
           <th scope="col">6am - 12pm</th>
           <th scope="col">12pm - 6pm</th>
-          <th scope="col">6pm - 12am</th>
+          <th scope="col">6pm - 12am</th> -->
         </tr>
       </thead>
     <tbody>

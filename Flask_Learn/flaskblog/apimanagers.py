@@ -101,13 +101,17 @@ def get4dayweather():
 
 def get24hweather():
     # list to keep weather in 6-hour intervals (4 entries)
+    start = []
+    end = []
     weather = []
     # making a GET request to the API endpoint, obtain output in a dictionary format with .json()
     response = requests.get("https://api.data.gov.sg/v1/environment/24-hour-weather-forecast", get_dt()).json()
     for forecast in response["items"][0]["periods"]:
         weather.append(forecast["regions"])
+        start.append(forecast["time"]["start"])
+        end.append(forecast["time"]["end"])
 
-    return weather
+    return weather, start, end
 
 def getcurweather(lat, long):
     # list to keep weather in 6-hour intervals (4 entries)

@@ -492,8 +492,19 @@ def recentsearches():
 
 @app.route('/weather_24h')
 def weather_24h():
-    weather = get24hweather()
-    return render_template('weather_24h.html', weather=weather)
+    weather, start, end = get24hweather()
+    starttime = []
+    endtime = []
+    length = len(weather)
+    for x in start:
+        date = str(x[0:10])
+        time = str(x[11:16])
+        starttime.append(date + " " + time)
+    for y in end:
+        date = str(y[0:10])
+        time = str(y[11:16])
+        endtime.append(date + " " + time)
+    return render_template('weather_24h.html', weather=weather, starttime=starttime, endtime=endtime, length=length)
 
 @app.route('/weather_4day')
 def weather_4day():
