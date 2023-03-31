@@ -1,7 +1,6 @@
 import pandas as pd
 from NearestFinder.findNearest import *
 import mysql.connector as connection
-from NearestFinder.chatbot import *
 # this function returns a dictionary containing the information of the nearest 3 carparks
 # the information for every carpark is contained in a dictionary containing the address, carpark number (needed for carpark API),
 # and the distance (in metres) from the particular location (lat, long) to the carpark
