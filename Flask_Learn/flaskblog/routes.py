@@ -1,14 +1,8 @@
-import os
-import secrets
-from PIL import Image
-import json
 from flask import render_template, url_for, flash, redirect, session, request
-from flaskblog import app, db, bcrypt, mail
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
+from flaskblog import app, db, bcrypt
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from flaskblog.models import Accounts, Favorites, SportsFacilities, RecentSearches
-from flask_mysqldb import MySQL, MySQLdb
 from flask_login import login_user, current_user, logout_user, login_required
-from flask_mail import Message
 import mysql.connector
 from NearestFinder.nearestCarparks import *
 from NearestFinder.nearestEateries import *
@@ -88,6 +82,7 @@ LOCATION = ""
 LOCATION_LAT = ""
 LOCATION_LONG = ""
 
+
 @app.route("/")
 @app.route("/home", methods = ['POST', 'GET'])
 def home():
@@ -98,7 +93,7 @@ def home():
     else: 
         session["loc"] = "region"
         return render_template('home.html', sports = SPORTS, locations = LOCATIONS)
-    
+
 @app.route("/currentloc", methods = ['POST', 'GET'])
 def currentloc():
     if request.method == 'POST':
@@ -119,10 +114,6 @@ def secondloc():
 
     return render_template('secondloc.html', sport=sport, firstlocation=firstlocation, locations=LOCATIONS)
 
-@app.route("/about")
-def about():
-    return render_template('about.html', title='About')
-
 @app.route("/search2loc", methods=['POST', 'GET'])
 def search2loc():
     activity = request.args.get("activities")
@@ -137,7 +128,7 @@ def search2loc():
         locationLong1 = session["long"]
     locationLat2 = LOCATIONS[secondlocation][0]
     locationLong2 = LOCATIONS[secondlocation][1]
-    locationLat, locationLong = float((locationLat1+locationLat2)/2), float((locationLong1+locationLong2)/2)
+    locationLat, locationLong = float((float(locationLat1)+float(locationLat2))/2), float((float(locationLong1)+float(locationLong2))/2)
     mycursor = mydb.cursor()
     sql = """select Y, X, gid, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(
 	POW(69.1 * (Y - %s), 2) +
@@ -187,9 +178,7 @@ def search():
     for i in result:
         resCount += 1
 
-
     return render_template('search.html', title='Search results', activity=activity, locationLat=locationLat, locationLong=locationLong, result=result, resCount=resCount)
-
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -204,7 +193,6 @@ def register():
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -222,26 +210,10 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
-
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('home'))
-
-
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
-
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -257,50 +229,6 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template('account.html', title='Account', form=form)
-
-
-def send_reset_email(user):
-    token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender='noreply@demo.com', recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
-    
-If you did not make this request then simply ignore this email and no changes will be made.
-'''
-    mail.send(msg)
-
-
-@app.route("/reset_password", methods=['GET', 'POST'])
-def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RequestResetForm()
-    if form.validate_on_submit():
-        user = Accounts.query.filter_by(email=form.email.data).first()
-        send_reset_email(user)
-        flash('An email has been sent with instructions to reset your password.', 'info')
-        return redirect(url_for('login'))
-    return render_template('reset_request.html', title='Reset Password', form=form)
-
-
-@app.route("/reset_password/<token>", methods=['GET', 'POST'])
-def reset_token(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    user = User.verify_reset_token(token)
-    if user is None:
-        flash('That is an invalid or expired token', 'warning')
-        return redirect(url_for('reset_request'))
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user.password = hashed_password
-        db.session.commit()
-        flash('Your password has been updated! You are now able to log in', 'success')
-        return redirect(url_for('login'))
-    return render_template('reset_token.html', title='Reset Password', form=form)
-
 
 @app.route("/facility_info", methods=['GET', 'POST'])
 def facility_info():
@@ -362,7 +290,6 @@ def facility_info():
                            lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory, 
                            psiarea=psiarea, forecast=forecast, region=region)
 
-
 @app.route("/parking", methods=['GET', 'POST'])
 def parking():
 
@@ -380,8 +307,6 @@ def eateries():
     long = float(request.args.get('long'))
 
     result = nearestHE(lat, long)
-
-
     return render_template('eateries.html', lat=lat, long=long, result=result)
 
 @app.route("/eaterymap", methods=['GET', 'POST'])
@@ -412,11 +337,6 @@ def parking_info():
     availability = getcarparkinfo(cpno)
 
     return render_template('parking_info.html', res=res, name=name, availability=availability, cpno=cpno)
-
-@app.route("/search_results")
-def search_results():
-    return render_template('search_results.html')
-
 
 @app.route('/save_favorite', methods=['POST'])
 @login_required
@@ -460,7 +380,6 @@ def save_favorite():
     selected_facility_list = [str(elem) for elem in selected_facility_list]
     return redirect(url_for('facility_info', selected_facility_list='|'.join(selected_facility_list), source='save_favorite'))
 
-
 @app.route('/favorites')
 @login_required
 def favorites():
@@ -474,7 +393,6 @@ def favorites():
             facilities.append(facility)
 
     return render_template('favorites.html', title='Favorites', facilities=facilities, source='favorites')
-
 
 @app.route('/recentsearches')
 @login_required
