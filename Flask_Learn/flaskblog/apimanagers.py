@@ -18,9 +18,11 @@ def getcarparkdata():
     return data
 
 def getcarparkinfo(cpno):
-    carparkdata = getcarparkdata()
-    if carparkdata == None:
-        return "Updating, refresh to load."
+    refresh = 1
+    while(refresh):
+        carparkdata = getcarparkdata()
+        if carparkdata != None:
+            refresh = 0
     # iterate through each dictionary of carpark information
     for info in carparkdata:
         # if the carpark number matches, return the availability
