@@ -24,18 +24,19 @@ def nearestHE(lat, long):
     nearestname = find_nearest(lat, long, healthiereateries, "Name" )
     nearestlat = find_nearest(lat, long, healthiereateries, "lat" )
     nearestlon = find_nearest(lat, long, healthiereateries, "lon" )
-    healthieroptions = []
-    for name in nearestname:
-        query = "What healthy options are there at" + name + " Singapore? Answer in at most 50 words. If you face difficulties answering, simply reply me with 'Information currently unavailable'"
-        healthieroptions.append(chatgpt(query))
+    # healthieroptions = []
+    # for name in nearestname:
+    #     query = "What healthy options are there at" + name + " Singapore? Answer in at most 50 words. If you face difficulties answering, simply reply me with 'Information currently unavailable'"
+    #     healthieroptions.append(chatgpt(query))
     # nearestblk = find_nearest(lat, long, healthiereateries, "ADDRESSBLOCKHOUSENUMBER" )
     # nearestbld = find_nearest(lat, long, healthiereateries, "ADDRESSBUILDINGNAME" )
     # nearestpos = find_nearest(lat, long, healthiereateries, "ADDRESSPOSTALCODE" )
     nearestst = find_nearest(lat, long, healthiereateries, "ADDRESSSTREETNAME" )
     nearestdist = find_nearest(lat, long, healthiereateries, "distance" )
-    result = {"first":{"name":nearestname[0], "dist":nearestdist[0], "lat":nearestlat[0], "lon":nearestlon[0], "healthieroptions":healthieroptions[0], "st":nearestst[0]},
-              "second":{"name":nearestname[1], "dist":nearestdist[1], "lat":nearestlat[1], "lon":nearestlon[1], "healthieroptions":healthieroptions[1], "st":nearestst[1]},
-              "third":{"name":nearestname[2], "dist":nearestdist[2], "lat":nearestlat[2], "lon":nearestlon[2], "healthieroptions":healthieroptions[2], "st":nearestst[2]}}
+    nearestdesc = find_nearest(lat, long, healthiereateries, "description" )
+    result = {"first":{"name":nearestname[0], "dist":nearestdist[0], "lat":nearestlat[0], "lon":nearestlon[0], "healthieroptions":nearestdesc[0], "st":nearestst[0]},
+              "second":{"name":nearestname[1], "dist":nearestdist[1], "lat":nearestlat[1], "lon":nearestlon[1], "healthieroptions":nearestdesc[1], "st":nearestst[1]},
+              "third":{"name":nearestname[2], "dist":nearestdist[2], "lat":nearestlat[2], "lon":nearestlon[2], "healthieroptions":nearestdesc[2], "st":nearestst[2]}}
     
     return result
     
