@@ -20,9 +20,6 @@
               <div class="col-md-2 mt-2">
                 <a href="javascript:history.back()" class="btn btn-secondary">Back to searches</a>
               </div>
-              <div class="col-md-2 mt-2 text-center">
-                <a href="{{ url_for('home') }}" class="btn btn-info">Reviews</a>
-              </div>
               <div class="col-md-8 text-right mt-2">
                 <form method="post" action="{{ url_for('save_favorite', lat=lat, long=long) }}" class="d-flex justify-content-end align-items-center">
                   <div class="custom-control custom-checkbox mr-3">
