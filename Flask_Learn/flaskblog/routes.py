@@ -152,15 +152,22 @@ def search2loc():
 
 @app.route("/search", methods = ['POST', 'GET'])
 def search():
-    activity = request.args.get("activities")
-    activity = SPORTS[activity]
-    if session["loc"] == "region":
-        location = request.args.get("location")
-        locationLat = LOCATIONS[location][0]
-        locationLong = LOCATIONS[location][1]
-    else:
+    source = request.args.get('source')  # retrieve the source parameter
+    if source == 'facility_info':
         locationLat = session["lat"]
         locationLong = session["long"]
+        activity = session['activity']
+    else:
+        activity = request.args.get("activities")
+        activity = SPORTS[activity]
+        session['activity'] = activity  # store activity in the session
+        if session["loc"] == "region":
+            location = request.args.get("location")
+            locationLat = LOCATIONS[location][0]
+            locationLong = LOCATIONS[location][1]
+        else:
+            locationLat = session["lat"]
+            locationLong = session["long"]
 
     mycursor = mydb.cursor()
     sql = """select Y, X, gid, Name, FACILITIES, ROAD_NAME, CONTACT_NO, ROUND(SQRT(

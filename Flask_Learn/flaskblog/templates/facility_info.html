@@ -18,8 +18,8 @@
           <div class="row">
             <div class="row">
               <div class="col-md-2 mt-2">
-                <button onclick="history.back()" class="btn button-17 mr-auto">Back to searches</a>
-              </div>
+                <button type="button" class="btn button-17 mr-auto" onclick="window.location.href='{{ url_for('search', source='facility_info') }}'">Back to searches</button>
+              </div>              
               {% if current_user.is_authenticated %}
               <div class="col-md-10 text-right mt-2">
                 <form method="post" action="{{ url_for('save_favorite', lat=lat, long=long) }}">
