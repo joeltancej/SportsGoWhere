@@ -43,5 +43,8 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
+        <form action="{{ url_for('change_password') }}" method="get">
+            <button type="submit" class="btn btn-outline-info">Change Password</button>
+        </form>
     </div>
 {% endblock content %}

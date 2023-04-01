@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flaskblog.models import Accounts
+import bcrypt
 
 
 class RegistrationForm(FlaskForm):
@@ -31,7 +31,6 @@ class LoginForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
 
@@ -55,19 +54,16 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('That email is taken. Please choose a different one.')
 
 
-class RequestResetForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    submit = SubmitField('Request Password Reset')
-
-    def validate_email(self, email):
-        user = Accounts.query.filter_by(email=email.data).first()
-        if user is None:
-            raise ValidationError('There is no account with that email. You must register first.')
-
-
-class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password',
-                                     validators=[DataRequired(), EqualTo('password')])
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Reset Password')
+
+    def validate_current_password(self, current_password):
+        if not bcrypt.checkpw(current_password.data.encode('utf-8'), current_user.password.encode('utf-8')):
+            raise ValidationError('Incorrect current password.')
+
+    def validate_new_password(self, new_password):
+        if bcrypt.checkpw(new_password.data.encode('utf-8'), current_user.password.encode('utf-8')):
+            raise ValidationError('New password must be different from current password.')

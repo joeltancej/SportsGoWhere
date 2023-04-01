@@ -18,18 +18,17 @@
           <div class="row">
             <div class="row">
               <div class="col-md-2 mt-2">
-                <button onclick="history.back()" class="btn btn-secondary">Back to searches</a>
+                <button onclick="history.back()" class="btn button-17 mr-auto">Back to searches</a>
               </div>
-              <div class="col-md-8 text-right mt-2">
-                <form method="post" action="{{ url_for('save_favorite', lat=lat, long=long) }}" class="d-flex justify-content-end align-items-center">
-                  <div class="custom-control custom-checkbox mr-3">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="is_favorite">
-                    <label class="custom-control-label" for="customCheck1">Favorite</label>
-                  </div>
+              {% if current_user.is_authenticated %}
+              <div class="col-md-10 text-right mt-2">
+                <form method="post" action="{{ url_for('save_favorite', lat=lat, long=long) }}">
                   <input type="hidden" name="selected_facility_list_gid" value="{{ selected_facility_list[2] }}">
-                  <button type="submit" class="btn btn-info">Save</button>
+                      <button type="submit" class="btn btn-success" name="add_favorite" value="1">Add to Favorites</button>
+                      <button type="submit" class="btn btn-danger" name="remove_favorite" value="1">Remove from Favorites</button>
                 </form>
               </div>
+              {% endif %}
             </div>
             
           <h1 style="margin-bottom: 25px;"></h1>

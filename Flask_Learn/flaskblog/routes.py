@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, session, request
 from flaskblog import app, db, bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, ChangePasswordForm
 from flaskblog.models import Accounts, Favorites, SportsFacilities, RecentSearches
 from flask_login import login_user, current_user, logout_user, login_required
 import mysql.connector
@@ -13,6 +13,7 @@ from pytz import timezone
 from sqlalchemy.exc import IntegrityError
 import datetime
 import ast
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 tz = timezone('Asia/Singapore')  # set the timezone to Singapore time
 
@@ -202,7 +203,7 @@ def login():
     if form.validate_on_submit():
         user = Accounts.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
+            login_user(user)
             next_page = request.args.get('next')
             flash('Login Successful!', 'success')
             return redirect(next_page) if next_page else redirect(url_for('home'))
@@ -342,7 +343,6 @@ def parking_info():
 @login_required
 def save_favorite():
     facility_gid = request.form['selected_facility_list_gid']
-    is_favorite = request.form.get('is_favorite', False)
     account_id = current_user.id
 
     # Get the facility ID from the SportsFacilities table using the facility_gid
@@ -355,8 +355,8 @@ def save_favorite():
 
     # Check if the record already exists in the favorites table
     existing_favorite = Favorites.query.filter_by(account_id=account_id, facility_id=facility_id).first()
-    
-    if is_favorite:
+
+    if 'add_favorite' in request.form:
         if not existing_favorite:
             # Insert a new record if it doesn't exist
             favorite = Favorites(account_id=account_id, facility_id=facility_id)
@@ -365,7 +365,7 @@ def save_favorite():
             flash('The facility has been added to your favorites!', 'success')
         else:
             flash('The facility is already in your favorites!', 'danger')
-    else:
+    elif 'remove_favorite' in request.form:
         if existing_favorite:
             # Delete the existing record if it exists
             db.session.delete(existing_favorite)
@@ -433,3 +433,18 @@ def weather_4day():
 def psi():
     regions, readings = getfullpsi()
     return render_template('psi.html', regions=regions, readings=readings)
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if check_password_hash(current_user.password, form.current_password.data):
+            new_hashed_password = generate_password_hash(form.new_password.data).decode('utf-8')
+            current_user.password = new_hashed_password
+            db.session.commit()
+            flash('Your password has been updated!', 'success')
+            return redirect(url_for('account'))
+        else:
+            flash('Current password is incorrect.', 'danger')
+    return render_template('change_password.html', title='Change Password', form=form)  
