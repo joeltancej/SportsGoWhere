@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Current Weather:</h1>
+<p></p>
+<form action="/weather_cur" method="POST" id="my-form">
+    <select class="form-select" data-live-search="true" name="selected" id="selected" aria-label=".form-select-lg example" onchange="submitForm()">
+        {% for forecast in forecasts %}
+        {% if forecast["area"] == prevselection %}
+        <option selected>{{ forecast["area"] }}</option>
+        {% else %}
+        <option>{{ forecast["area"] }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    {% if areaforecast %}
+    <p><b>Forecast:</b> {{areaforecast}}</p>
+    {% endif %}
+</form>
+<script>
+    function submitForm() {
+        document.getElementById("my-form").submit();
+    }
+</script>
+
+{% endblock %}

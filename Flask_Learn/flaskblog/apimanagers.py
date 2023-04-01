@@ -135,7 +135,7 @@ def getcurweather(lat, long):
     region = response["area_metadata"][index]["name"]
     for forecast in response["items"][0]["forecasts"]:
         if forecast["area"] == region:
-            return region, forecast["forecast"]
+            return region, forecast["forecast"], response["items"][0]["forecasts"]
     return "Error"
 
 def get_dt():

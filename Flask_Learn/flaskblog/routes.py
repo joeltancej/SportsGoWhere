@@ -292,7 +292,7 @@ def facility_info():
     session['selected_facility_list'] = selected_facility_list
     airquality, airdescriptor, airadvisory, psiarea= getpsi(selected_facility_list[0], selected_facility_list[1])
 
-    region, forecast = getcurweather(selected_facility_list[0], selected_facility_list[1])
+    region, forecast, forecastlist = getcurweather(selected_facility_list[0], selected_facility_list[1])
 
     return render_template('facility_info.html', selected_facility=selected_facility, selected_facility_list=selected_facility_list, 
                            lat=lat, long=long, airquality=airquality, airdescriptor=airdescriptor, airadvisory=airadvisory, 
@@ -435,6 +435,21 @@ def weather_24h():
 def weather_4day():
     weather, dates, temp = get4dayweather()
     return render_template('weather_4day.html', weather=weather, dates=dates, temp=temp)
+
+@app.route('/weather_cur', methods=['GET', 'POST'])
+def weather_cur():
+    region, forecast, forecastlist = getcurweather(1, 100)
+    if request.method == 'GET':
+        return render_template('weather_cur.html', forecasts=forecastlist)
+    if request.method == 'POST':
+        selected = request.form.get("selected")
+        areaforecast=""
+        for item in forecastlist:
+            if item["area"] == selected:
+                areaforecast = item["forecast"]
+                # break
+        return render_template('weather_cur.html', prevselection=selected, areaforecast=areaforecast, forecasts=forecastlist)
+
 
 @app.route('/psi')
 def psi():
