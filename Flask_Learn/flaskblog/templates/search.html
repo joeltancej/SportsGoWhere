@@ -17,18 +17,11 @@
     <div id="content" class="container">
         <div class="panel panel-default">
         <div class="panel-body">
-            <div class="container">
-                <div class="row">
-                  <div class="col-md-12 text-left">
-                    <h1>Nearest Sports Facilities</h1>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-2 mt-2 text-left">
-                    <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Back to Home</button>
-                  </div>
-                </div>
-              </div>              
+            <h1>Nearest Sports Facilities</h1>
+            <p>Click on any of these sports facilities to view the facility's information.</p>
+            <div class="col-md-2 mt-2 text-left" style="margin-left: -15px;">
+                <button type="button" class="btn btn-outline-secondary" onclick="history.back()">Back to Home</button>
+            </div>             
             <hr class="nomargin-bottom margin-top-10">
             <h6 class="nomargin"> 
                 {{ resCount }} results:
@@ -38,7 +31,7 @@
             <div class="clearfix search-result"><!-- item -->
                 <h4><a href="{{url_for('facility_info', type=[res])}}">{{ res[3] }}</a></h4>
                 <small class="text-success">Distance: {{ res[7] }}km</small>
-                <p>Facilities: {{ res[4] }}</p>
+                <p>Amenities: {{ res[4] }}</p>
             </div><!-- /item -->
             {% endfor %}
             <!-- /SEARCH RESULTS -->
