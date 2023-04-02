@@ -13,8 +13,16 @@
         {% endif %}
         {% endfor %}
     </select>
+    <br>
     {% if areaforecast %}
-    <p><b>Forecast:</b> {{areaforecast}}</p>
+    <table class="table table-bordered table-light" style="width:20%">
+        <thead class="table-primary">
+            <tr>
+              <th scope="col" style="width:20%">Weather:</th>
+              <td scope="col" class="text-center">{{areaforecast}}</td>
+            </tr>
+        </thead>
+    </table>  
     {% endif %}
 </form>
 <script>

@@ -4,7 +4,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
+                <legend class="border-bottom mb-4">Join Us Today!</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
 
@@ -34,17 +34,38 @@
                 </div>
                 <div class="form-group">
                     {{ form.password.label(class="form-control-label") }}
-                    {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+                    <div class="input-group">
+                      {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid", id="password") }}
+                      {% else %}
+                        {{ form.password(class="form-control form-control-lg", id="password") }}
+                      {% endif %}
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <input type="checkbox" onclick="togglePasswordVisibility()"> &nbsp;Show Password
                         </div>
-                    {% else %}
-                        {{ form.password(class="form-control form-control-lg") }}
+                      </div>
+                    </div>
+                    {% if form.password.errors %}
+                      <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
                     {% endif %}
-                </div>
+                  </div>
+                  
+                  <script>
+                    function togglePasswordVisibility() {
+                      var passwordField = document.getElementById("password");
+                      if (passwordField.type === "password") {
+                        passwordField.type = "text";
+                      } else {
+                        passwordField.type = "password";
+                      }
+                    }
+                  </script>
+                  
                 <div class="form-group">
                     {{ form.confirm_password.label(class="form-control-label") }}
                     {% if form.confirm_password.errors %}
