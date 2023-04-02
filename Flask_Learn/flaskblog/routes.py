@@ -74,7 +74,7 @@ mydb = mysql.connector.connect(
 # secret key
 app.secret_key = "sportsgowhere"
 # session lifetime
-app.permanent_session_lifetime = timedelta(minutes = 10)
+app.permanent_session_lifetime = timedelta(minutes = 30)
 
 SEARCH = {}
 
@@ -215,7 +215,7 @@ def login():
             flash('Login Successful!', 'success')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+            flash('Login Unsuccessful. Please check email and password.', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 @app.route("/logout")
