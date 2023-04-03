@@ -35,12 +35,12 @@ Steps to install and run project:
   (line 11 in nearestEateries.py)
 
 7. Set up local database and connection in MySQL Workbench
-8. On your local database, import the 3 csv files with their respective names (e.g. sportsfacilities.csv as sportsfacilities Table)
-9. On Visual Studio Code, open up the terminal and change directory to Flask_Learn (cd Flask_Learn)
-10. Type the following commands:
+8. On Visual Studio Code, open up the terminal and change directory to Flask_Learn (cd Flask_Learn)
+9. Type the following commands:
 with app.app_context():
   db.create_all()
-11. Open up MySQL Workbench and check that there are 3 new tables: accounts, recentsearches, favorites
+10. Open up MySQL Workbench and check that there are 4 new tables: accounts, recentsearches, favorites, sportsfacilities
+11. On your local database, import the 3 csv files with their respective names (sportsfacilities.csv as sportsfacilities, hdbcarparks.csv as hdbcarparks, healthiereateries.csv as healthiereateries)
 12. Open up Visual Studio code and run run.py
 13. Open the IP address in your browser 
 14. Enjoy our website
