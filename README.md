@@ -39,3 +39,13 @@ with app.app_context():
 12. Open up Visual Studio code and run run.py
 13. Open the IP address in your browser 
 14. Enjoy our website
+---
+### File and Logic Organisation
+- SportsGoWhere/Flask_Learn/run.py: runs the application
+- Datasets directory: csv files for carparks, eateries, and sports facilities
+- Flask_Learn/NearestFinder: Python logic files to find nearest carparks, eateries, and implement geolocation.
+- Flask_Learn/flaskblog/routes.py: Contol functions to respond to user inputs and render required html file. 
+- Flask_Learn/flaskblog/apimanagers.py: Python code to provide interface for carpark, PSI, datetime, and weather APIs. 
+- Flask_Learn/flaskblog/models.py: Creates the tables for the entities and establishes relation between datasets.
+- SportsGoWhere/Flask_Learn/flaskblog/templates: directory contains all html files which each correspond to a view. 
+
