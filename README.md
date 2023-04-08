@@ -4,21 +4,16 @@ Steps to install and run project:
 1. Clone github repository
 2. Open repository in Visual Studio Code
 3. Open up the terminal on Visual Studio Code
-4. Check requirements:
-  Flask==2.2.2
-  Flask_Bcrypt==1.0.1
-  Flask_Login==0.6.2
-  flask_sqlalchemy==3.0.3
-  Flask_WTF==1.1.1
-  itsdangerous==2.1.2
-  mysql_connector_repackaged==0.3.1
-  pandas==1.3.5
-  python_bcrypt==0.3.2
-  pytz==2021.3
-  requests==2.25.1
-  SQLAlchemy==2.0.4
-  WTForms==3.0.1
-
+4. install these packages\
+&emsp;&emsp; pip install flask\
+&emsp;&emsp; pip install mysqlclient\
+&emsp;&emsp; pip install image\
+&emsp;&emsp; pip install flask-wtf\
+&emsp;&emsp; pip install email_validator\
+&emsp;&emsp; pip install flask-mysqldb\
+&emsp;&emsp; pip install requests\
+&emsp;&emsp; pip install pandas
+  
 5. Download and install MySQL Workbench (preferably host="localhost", database = 'sportsgowhere',user="root", password="password")
 6. Open up Visual Studio Code and edit the following files with the correct values for host, user, password, database:
 
