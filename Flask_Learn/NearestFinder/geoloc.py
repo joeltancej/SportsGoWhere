@@ -2,7 +2,7 @@ import requests
 
 
 def getgeoloc():
-    url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCs85_IULmdNSTUj21h_m7FK-15Z1F6V4U'
+    url = 'https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_API_KEY'
     r = requests.post(url)
     response = r.json()
     lat = response['location']['lat']
